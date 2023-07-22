@@ -3,13 +3,12 @@ import SearchIcon from "./search.svg";
 import "./App.css";
 import MovieCard from "./MovieCard";
 
-const API_URL = "http://www.omdbapi.com?apikey=b1fb52f7";
 const App = () => {
   const [movies, setMovies] = useState([]);
-const[searchTerm, setSearchTerm]=useState('');
+  const [searchTerm, setSearchTerm] = useState("marvel");
 
   const searchMovies = async (title) => {
-    const response = await fetch(`${API_URL}&s=${title}`);
+    const response = await fetch(`http://www.omdbapi.com?apikey=${process.env.REACT_APP_API_KEY}&s=${title}`);
     const data = await response.json();
     setMovies(data.Search);
   };
@@ -23,17 +22,17 @@ const[searchTerm, setSearchTerm]=useState('');
       <h1>Nethub</h1>
       <div className="search">
         <input
-          placeholder="Search for  movies"
+          placeholder="Search for movies"
           value={searchTerm}
-          onChange={(e) =>  setSearchTerm(e.target.value)}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <img src={SearchIcon} alt="search" onClick={() =>{searchMovies(searchTerm);setSearchTerm([]) } }/>
+        <img src={SearchIcon} alt="search" onClick={() => { searchMovies(searchTerm); setSearchTerm(''); }} />
       </div>
 
       {movies?.length > 0 ? (
         <div className="container">
           {movies.map((movie) => (
-            <MovieCard movie={movie} />
+            <MovieCard movie={movie} key={movie.imdbID} />
           ))}
         </div>
       ) : (
@@ -44,4 +43,5 @@ const[searchTerm, setSearchTerm]=useState('');
     </div>
   );
 };
+
 export default App;
